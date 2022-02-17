@@ -1,28 +1,25 @@
-import logo from "./logo.svg";
-import "./App.css";
+import "./home.css";
 import {
-  Button,
-  Slider,
   Card,
   Typography,
   Paper,
   CardMedia,
   Grid,
-  DialogContentText,
   CardContent,
 } from "@mui/material";
 
 import React, { useState } from "react";
 
-function App() {
+export const Home = () => {
+  //function Home() {
   //First variable holds value variable, other one changes the value using an already-working function
   /*const [value, setValue] = useState(55);
 
-  function onSliderChange(event) {
-    const newValue = event.target.value;
-    console.log(newValue);
-    setValue(newValue);
-  }*/
+    function onSliderChange(event) {
+      const newValue = event.target.value;
+      console.log(newValue);
+      setValue(newValue);
+    }*/
 
   return (
     <div className="App">
@@ -44,12 +41,12 @@ function App() {
             style={{ justifyContent: "center", display: "flex" }}
           />
           <CardContent>
-            I am a 20 year old college student majoring in computer science. I
-            love the challenge of solving complex coding algorithms and the
-            creativity of designing user-friendly websites. Besides coding, I
-            enjoy baking and travelling. As yet, I have not been able to do all
-            that much travelling, with the time and expenses involved, but one
-            day I hope to run around the world and see the sights!
+            I am a 20 year old senior in Touro College majoring in computer
+            science. I love the challenge of solving complex coding algorithms
+            and the creativity of designing user-friendly websites. Besides
+            coding, I enjoy baking and travelling. As yet, I have not been able
+            to do all that much travelling, with the time and expenses involved,
+            but one day I hope to run around the world and see the sights!
           </CardContent>
         </Card>
         <Paper sx={{ width: 400, margin: 4 }}>
@@ -97,9 +94,12 @@ function App() {
             </Card>
           </Grid>
         </Grid>
+        <button onClick={() => this.setState({ name: "Nierman" })}>
+          Change Name
+        </button>
       </header>
     </div>
   );
-}
-
-export default App;
+  //}
+};
+//export default App;
