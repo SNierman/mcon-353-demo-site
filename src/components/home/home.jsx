@@ -11,16 +11,6 @@ import {
 import React, { useState } from "react";
 
 export const Home = () => {
-  //function Home() {
-  //First variable holds value variable, other one changes the value using an already-working function
-  /*const [value, setValue] = useState(55);
-
-    function onSliderChange(event) {
-      const newValue = event.target.value;
-      console.log(newValue);
-      setValue(newValue);
-    }*/
-
   return (
     <div className="App">
       <header className="App-header">
@@ -94,12 +84,7 @@ export const Home = () => {
             </Card>
           </Grid>
         </Grid>
-        <button onClick={() => this.setState({ name: "Nierman" })}>
-          Change Name
-        </button>
       </header>
     </div>
   );
-  //}
 };
-//export default App;

@@ -1,6 +1,6 @@
 import { TextField, Container, IconButton } from "@mui/material";
 import "./todo.css";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { CheckCircleTwoTone, Delete } from "@mui/icons-material";
 
 function Task({ task, index, completeTask, removeTask }) {
@@ -25,6 +25,7 @@ function Task({ task, index, completeTask, removeTask }) {
 }
 
 function CreateTodo() {
+  //Make this into global context
   const [tasks, setTasks] = useState([
     {
       title: "Daven",
@@ -36,6 +37,10 @@ function CreateTodo() {
     },
     {
       title: "Do homework",
+      completed: false,
+    },
+    {
+      title: "Go on vacation!!!",
       completed: false,
     },
   ]);
