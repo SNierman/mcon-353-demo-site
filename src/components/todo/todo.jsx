@@ -2,7 +2,7 @@ import { TextField, Container, IconButton } from "@mui/material";
 import "./todo.css";
 import React, { useState, useContext } from "react";
 import { CheckCircleTwoTone, Delete } from "@mui/icons-material";
-import { TodoContext } from "../app/App";
+import { TodoContext } from "../../state/todo/context";
 
 function Task({ task, index, completeTask, removeTask }) {
   return (
