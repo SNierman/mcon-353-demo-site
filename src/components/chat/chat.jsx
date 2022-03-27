@@ -1,15 +1,15 @@
 import React, { useState, useContext } from "react";
 import { useInterval } from "../../hooks/use-interval";
+import "./chat.css";
 import {
   Container,
   TextField,
   Box,
-  Paper,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  List,
+  Chip,
 } from "@mui/material";
 
 function Message(props) {
@@ -22,11 +22,20 @@ function Message(props) {
         flexDirection: "row",
       }}
       defaultValue=""
+      style={{
+        justifyContent:
+          props.username == props.currUser ? "flex-end" : "flex-start",
+      }}
     >
-      <Paper style={{ marginBottom: "1rem", padding: ".5rem" }}>
-        {props.userName}
-        {props.text}
-      </Paper>
+      <div>{props.username}</div>
+      <Chip
+        style={{
+          marginBottom: "1rem",
+          padding: ".5rem",
+          background: props.username == props.currUser ? "#FCCB00" : "white",
+        }}
+        label={props.text}
+      />
     </Box>
   );
 }
@@ -78,6 +87,37 @@ function NewRoomInput({ addNewRoom }) {
         placeholder="Enter chatroom name..."
         value={room}
         onChange={(e) => setRoom(e.target.value)}
+        style={{
+          margin: "2rem",
+          marginRight: "8rem",
+          float: "right",
+        }}
+      />
+    </form>
+  );
+}
+
+function NewUserInput({ addNewUser }) {
+  const [username, setUsername] = useState("");
+
+  const newUserInput = (e) => {
+    e.preventDefault();
+    if (!newUserInput) return;
+    addNewUser(username);
+    setUsername("");
+  };
+
+  return (
+    <form onSubmit={newUserInput}>
+      <TextField
+        placeholder="Enter username..."
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        style={{
+          marginLeft: "2rem",
+          float: "right",
+          marginRight: "8rem",
+        }}
       />
     </form>
   );
@@ -87,10 +127,11 @@ export const Chat = () => {
   const [currChatId, setCurrChatId] = useState(
     "975a3df9-c9b0-4e90-933e-52628736bdd5"
   );
-  const [currChatName, setCurrChatName] = useState("Chat");
+  const [currChatName, setCurrChatName] = useState("Touro");
   const [messages, setMessages] = useState([]);
   const [chats, setChats] = useState([]);
-  const [currUser, setCurrUser] = useState("");
+  const [currUser, setCurrUser] = useState("User");
+  const [users, setUsers] = useState([]);
 
   //get chatroom list
   useInterval(
@@ -123,7 +164,7 @@ export const Chat = () => {
   const addMessage = (text) => {
     const newMessage = {
       chatId: currChatId,
-      userName: currUser,
+      username: currUser,
       text: text,
     };
 
@@ -150,6 +191,11 @@ export const Chat = () => {
     });
   };
 
+  const addNewUser = (username) => {
+    setCurrUser(username);
+    setUsers([...users, username]);
+  };
+
   //need to make a method to fetch the api data from current chatroom when it is clicked. this is called
   // in onclick method
   const handleRoomSelected = (chatId, chatName) => {
@@ -164,19 +210,60 @@ export const Chat = () => {
     setCurrChatName(chatName);
   };
 
+  const handleUserSelected = (username) => {
+    setCurrUser(username);
+  };
+
   return (
     <div>
+      {/* chatroom with chats */}
+      <div
+        style={{
+          width: "40rem",
+          maxHeight: "20rem",
+          padding: "20px 10px 20px 20px",
+          float: "right",
+          marginRight: "10rem",
+        }}
+      >
+        <div
+          className="messages"
+          style={{
+            maxHeight: "25rem",
+            overflowY: "scroll",
+          }}
+        >
+          {messages
+            .slice(0)
+            .reverse()
+            .map((message, index) => (
+              <Message
+                style={{
+                  flexShrink: 1,
+                  float: message.username == currUser ? "right" : "left",
+                }}
+                username={message.username}
+                index={index}
+                key={index}
+                text={message.text}
+                currUser={currUser}
+              />
+            ))}
+        </div>
+        <div className="create-message">
+          <CreateMessage addMessage={addMessage} />
+        </div>
+      </div>
       {/* chatlist */}
       <Box
         style={{
           width: "7rem",
-          float: "left",
           margin: "2rem",
           backgroundColor: "white",
           color: "black",
         }}
       >
-        <FormControl fullWidth>
+        <FormControl fullWidth style={{ float: "left", marginTop: "2rem" }}>
           <InputLabel id="demo-simple-select-label">{currChatName}</InputLabel>
           <Select>
             <div>
@@ -196,32 +283,34 @@ export const Chat = () => {
         </FormControl>
       </Box>
       <NewRoomInput addNewRoom={addNewRoom} />
-      {/* chatroom with chats */}
-      <div
+
+      <Box
         style={{
-          width: "40vw",
-          margin: "auto",
-          padding: "20px 10px 20px 20px",
+          width: "7rem",
+          margin: "2rem",
+          backgroundColor: "white",
+          color: "black",
         }}
       >
-        <div className="messages">
-          {messages
-            .slice(0)
-            .reverse()
-            .map((message, index) => (
-              <Message
-                style={{ flexShrink: 1 }}
-                userName={message.userName}
-                index={index}
-                key={index}
-                text={message.text}
-              />
-            ))}
-        </div>
-        <div className="create-message">
-          <CreateMessage addMessage={addMessage} />
-        </div>
-      </div>
+        <FormControl fullWidth style={{ float: "left", marginTop: "2rem" }}>
+          <InputLabel>{currUser}</InputLabel>
+          <Select>
+            <div>
+              {users.map((username, index) => (
+                <MenuItem
+                  index={index}
+                  key={index}
+                  username={username}
+                  onClick={() => handleUserSelected(username)}
+                >
+                  {username}
+                </MenuItem>
+              ))}
+            </div>
+          </Select>
+        </FormControl>
+      </Box>
+      <NewUserInput addNewUser={addNewUser} />
     </div>
   );
 };
