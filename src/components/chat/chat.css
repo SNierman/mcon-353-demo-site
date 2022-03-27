@@ -1,3 +1,7 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.messages {
+  background: "#06252B";
+}

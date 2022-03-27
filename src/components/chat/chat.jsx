@@ -10,7 +10,10 @@ import {
   Select,
   MenuItem,
   Chip,
+  IconButton,
 } from "@mui/material";
+import SendRoundedIcon from "@mui/icons-material/Send";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 
 function Message(props) {
   return (
@@ -27,7 +30,7 @@ function Message(props) {
           props.username == props.currUser ? "flex-end" : "flex-start",
       }}
     >
-      <div>{props.username}</div>
+      <h6 style={{ color: "lightBlue" }}>{props.username}</h6>
       <Chip
         style={{
           marginBottom: "1rem",
@@ -52,19 +55,20 @@ function CreateMessage({ addMessage }) {
   return (
     <form onSubmit={handleSubmit}>
       <Container minwidth={2000}>
+        <IconButton onClick={handleSubmit} style={{ float: "right" }}>
+          <SendRoundedIcon />
+        </IconButton>
         <TextField
           sx={{ input: { color: "white" } }}
           variant="standard"
           style={{
             justifyContent: "center",
             display: "flex",
-            marginTop: "40px",
           }}
           className="textfield"
           value={message}
           placeholder="Say something..."
           onChange={(e) => setMessage(e.target.value)}
-          fullWidth
         />
       </Container>
     </form>
@@ -84,15 +88,24 @@ function NewRoomInput({ addNewRoom }) {
   return (
     <form onSubmit={newRoomInput}>
       <TextField
-        placeholder="Enter chatroom name..."
+        sx={{ input: { color: "white" } }}
+        placeholder="Add chatroom..."
         value={room}
+        variant="standard"
         onChange={(e) => setRoom(e.target.value)}
         style={{
-          margin: "2rem",
-          marginRight: "8rem",
-          float: "right",
+          marginTop: "3rem",
+          marginBottom: "4rem",
+          marginLeft: "4rem",
+          float: "left",
         }}
       />
+      <IconButton
+        onClick={newRoomInput}
+        style={{ float: "right", marginTop: "2.5rem", marginRight: "4.5rem" }}
+      >
+        <AddCircleOutlineRoundedIcon />
+      </IconButton>
     </form>
   );
 }
@@ -110,14 +123,23 @@ function NewUserInput({ addNewUser }) {
   return (
     <form onSubmit={newUserInput}>
       <TextField
-        placeholder="Enter username..."
+        sx={{ input: { color: "white" } }}
+        placeholder="Add username..."
         value={username}
+        variant="standard"
         onChange={(e) => setUsername(e.target.value)}
         style={{
-          marginLeft: "2.5rem",
+          marginLeft: "4rem",
+          marginTop: "3rem",
           float: "left",
         }}
       />
+      <IconButton
+        onClick={newUserInput}
+        style={{ float: "right", marginTop: "2.5rem", marginRight: "4.5rem" }}
+      >
+        <AddCircleOutlineRoundedIcon />
+      </IconButton>
     </form>
   );
 }
@@ -188,6 +210,8 @@ export const Chat = () => {
       },
       body: JSON.stringify(chat),
     });
+    setCurrChatId(chat);
+    setCurrChatName(name);
   };
 
   const addNewUser = (username) => {
@@ -216,41 +240,50 @@ export const Chat = () => {
   return (
     <div>
       {/* chatroom with chats */}
-      <div
-        style={{
-          width: "40rem",
-          height: "20rem",
-          padding: "20px 10px 20px 20px",
-          float: "right",
-          marginRight: "10rem",
-        }}
-      >
+      <div>
         <div
-          className="messages"
           style={{
-            maxHeight: "25rem",
-            overflowY: "scroll",
+            width: "50rem",
+            height: "20rem",
+            padding: "20px 10px 20px 20px",
+            float: "right",
+            marginRight: "10rem",
           }}
         >
-          {messages
-            .slice(0)
-            .reverse()
-            .map((message, index) => (
-              <Message
-                style={{
-                  flexShrink: 1,
-                  float: message.username == currUser ? "right" : "left",
-                }}
-                username={message.username}
-                index={index}
-                key={index}
-                text={message.text}
-                currUser={currUser}
-              />
-            ))}
-        </div>
-        <div className="create-message">
-          <CreateMessage addMessage={addMessage} />
+          <Box
+            class="messages"
+            style={{
+              maxHeight: "25rem",
+              minHeight: "25rem",
+              paddingLeft: "1rem",
+              paddingRight: "1rem",
+              background: "#114E5A",
+              overflowY: "scroll",
+              borderRadius: "5px",
+              outline: "#114E5A solid 20px",
+              marginBottom: "1rem",
+            }}
+          >
+            {messages
+              .slice(0)
+              .reverse()
+              .map((message, index) => (
+                <Message
+                  style={{
+                    flexShrink: 1,
+                    float: message.username == currUser ? "right" : "left",
+                  }}
+                  username={message.username}
+                  index={index}
+                  key={index}
+                  text={message.text}
+                  currUser={currUser}
+                />
+              ))}
+          </Box>
+          <div className="create-message" style={{ paddingTop: "1rem" }}>
+            <CreateMessage addMessage={addMessage} />
+          </div>
         </div>
       </div>
       {/* chatlist */}
@@ -258,12 +291,23 @@ export const Chat = () => {
         style={{
           width: "7rem",
           margin: "2rem",
+          marginLeft: "4rem",
           backgroundColor: "white",
           color: "black",
         }}
       >
-        <FormControl fullWidth style={{ float: "left", marginTop: "2rem" }}>
-          <InputLabel id="demo-simple-select-label">{currChatName}</InputLabel>
+        <FormControl
+          fullWidth
+          style={{
+            float: "left",
+            marginTop: "2rem",
+            background: "white",
+            borderRadius: "10px",
+          }}
+        >
+          <InputLabel id="demo-simple-select-label" style={{}}>
+            {currChatName}
+          </InputLabel>
           <Select>
             <div>
               {chats.map((chat, index) => (
@@ -287,11 +331,20 @@ export const Chat = () => {
         style={{
           width: "7rem",
           margin: "2rem",
+          marginLeft: "4rem",
           backgroundColor: "white",
           color: "black",
         }}
       >
-        <FormControl fullWidth style={{ float: "left", marginTop: "2rem" }}>
+        <FormControl
+          fullWidth
+          style={{
+            float: "left",
+            marginTop: "2rem",
+            background: "white",
+            borderRadius: "10px",
+          }}
+        >
           <InputLabel>{currUser}</InputLabel>
           <Select>
             <div>
