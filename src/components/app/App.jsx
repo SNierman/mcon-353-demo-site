@@ -4,7 +4,7 @@ import { Todo } from "../todo/todo.jsx";
 import { Header } from "../header/header";
 import { Chat } from "../chat/chat";
 import { TodoProvider } from "../../state/todo/context";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
 
 //create context in App
@@ -14,14 +14,14 @@ function App() {
     //<div>
     <TodoProvider>
       {/*BrowserRouter figures out where to go based on the route list below */}
-      <BrowserRouter>
+      <HashRouter>
         <Header />
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/todo" element={<Todo />} />
           <Route path="/chat" element={<Chat />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </TodoProvider>
     //</div>
   );

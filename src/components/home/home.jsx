@@ -7,6 +7,11 @@ import {
   Grid,
   CardContent,
 } from "@mui/material";
+import logo from "../../shaindel.jpg";
+import chocolate from "../../chocolate.jpg";
+import cookies from "../../cookies.jpg";
+import muffins from "../../muffins.jpg";
+import iceCream from "../../ice cream.jpg";
 
 import React, { useState } from "react";
 
@@ -26,7 +31,7 @@ export const Home = () => {
           <CardMedia
             component="img"
             height="500"
-            image="shaindel.jpg"
+            image={logo}
             alt="shaindel nierman"
             style={{ justifyContent: "center", display: "flex" }}
           />
@@ -48,7 +53,7 @@ export const Home = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="chocolate.jpg"
+                image={chocolate}
                 alt="chocolate"
               />
             </Card>
@@ -58,7 +63,7 @@ export const Home = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="cookies.jpg"
+                image={cookies}
                 alt="cookies"
               />
             </Card>
@@ -68,7 +73,7 @@ export const Home = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="ice cream.jpg"
+                image={iceCream}
                 alt="ice cream"
               />
             </Card>
@@ -78,7 +83,7 @@ export const Home = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="muffins.jpg"
+                image={muffins}
                 alt="muffins"
               />
             </Card>

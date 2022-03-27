@@ -9,6 +9,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  List,
 } from "@mui/material";
 
 function Message(props) {
@@ -20,10 +21,11 @@ function Message(props) {
         flexWrap: "wrap",
         flexDirection: "row",
       }}
+      defaultValue=""
     >
       <Paper style={{ marginBottom: "1rem", padding: ".5rem" }}>
-        {/* {props.message.currUser} */}
-        {props.message}
+        {props.userName}
+        {props.text}
       </Paper>
     </Box>
   );
@@ -82,7 +84,7 @@ function NewRoomInput({ addNewRoom }) {
 }
 
 export const Chat = () => {
-  const [currChat, setCurrChat] = useState(
+  const [currChatId, setCurrChatId] = useState(
     "975a3df9-c9b0-4e90-933e-52628736bdd5"
   );
   const [currChatName, setCurrChatName] = useState("Chat");
@@ -106,7 +108,7 @@ export const Chat = () => {
   useInterval(
     () => {
       fetch(
-        `https://z36h06gqg7.execute-api.us-east-1.amazonaws.com/chats/${currChat}/messages`
+        `https://z36h06gqg7.execute-api.us-east-1.amazonaws.com/chats/${currChatId}/messages`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -114,23 +116,24 @@ export const Chat = () => {
         });
     },
     1000, // fast polling
-    currChat
+    currChatId
   );
 
   //to add chats to api, uses put
   const addMessage = (text) => {
-    const newMessages = {
-      currChat: currChat,
+    const newMessage = {
+      chatId: currChatId,
+      userName: currUser,
       text: text,
     };
+
     fetch("https://z36h06gqg7.execute-api.us-east-1.amazonaws.com/messages", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json", // tells REST that we will send the body data in JSON format
       },
-      body: JSON.stringify(newMessages),
+      body: JSON.stringify(newMessage),
     });
-    setMessages(newMessages);
   };
 
   //to add chatroom to api list
@@ -149,43 +152,20 @@ export const Chat = () => {
 
   //need to make a method to fetch the api data from current chatroom when it is clicked. this is called
   // in onclick method
-  const handleRoomSelected = (chatID, chatName) => {
+  const handleRoomSelected = (chatId, chatName) => {
     fetch(
-      `https://z36h06gqg7.execute-api.us-east-1.amazonaws.com/chats/${currChat}/messages`
+      `https://z36h06gqg7.execute-api.us-east-1.amazonaws.com/chats/${chatId}/messages`
     )
       .then((response) => response.json())
       .then((data) => {
-        setCurrChat(data.Items);
+        setMessages(data.Items);
       });
-    setCurrChat(chatID);
+    setCurrChatId(chatId);
     setCurrChatName(chatName);
   };
 
   return (
     <div>
-      {/* chatroom with chats */}
-      <div
-        style={{
-          width: "40vw",
-          margin: "auto",
-          padding: "20px 10px 20px 20px",
-        }}
-      >
-        <div className="messages">
-          {messages.map((message, index) => (
-            <Message
-              style={{ flexShrink: 1 }}
-              message={message.text}
-              index={index}
-              key={index}
-            />
-          ))}
-        </div>
-        <div className="create-message">
-          <CreateMessage addMessage={addMessage} />
-        </div>
-      </div>
-
       {/* chatlist */}
       <Box
         style={{
@@ -198,22 +178,17 @@ export const Chat = () => {
       >
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">{currChatName}</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={chats}
-            label="ChatRoomList"
-            defaultValue={""}
-          >
+          <Select>
             <div>
-              {chats.map((chatID, index) => (
+              {chats.map((chat, index) => (
                 <MenuItem
-                  value={chatID}
                   index={index}
                   key={index}
-                  onClick={() => handleRoomSelected(chatID)}
+                  name={chat.name}
+                  id={chat.id}
+                  onClick={() => handleRoomSelected(chat.id, chat.name)}
                 >
-                  {chatID.name}
+                  {chat.name}
                 </MenuItem>
               ))}
             </div>
@@ -221,6 +196,32 @@ export const Chat = () => {
         </FormControl>
       </Box>
       <NewRoomInput addNewRoom={addNewRoom} />
+      {/* chatroom with chats */}
+      <div
+        style={{
+          width: "40vw",
+          margin: "auto",
+          padding: "20px 10px 20px 20px",
+        }}
+      >
+        <div className="messages">
+          {messages
+            .slice(0)
+            .reverse()
+            .map((message, index) => (
+              <Message
+                style={{ flexShrink: 1 }}
+                userName={message.userName}
+                index={index}
+                key={index}
+                text={message.text}
+              />
+            ))}
+        </div>
+        <div className="create-message">
+          <CreateMessage addMessage={addMessage} />
+        </div>
+      </div>
     </div>
   );
 };
