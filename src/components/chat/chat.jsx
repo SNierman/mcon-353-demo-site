@@ -88,6 +88,7 @@ function NewRoomInput({ addNewRoom }) {
   return (
     <form onSubmit={newRoomInput}>
       <TextField
+        id="input"
         sx={{ input: { color: "white" } }}
         placeholder="Add chatroom..."
         value={room}
@@ -123,6 +124,7 @@ function NewUserInput({ addNewUser }) {
   return (
     <form onSubmit={newUserInput}>
       <TextField
+        id="input"
         sx={{ input: { color: "white" } }}
         placeholder="Add username..."
         value={username}
