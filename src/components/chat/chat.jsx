@@ -32,7 +32,7 @@ function Message(props) {
         style={{
           marginBottom: "1rem",
           padding: ".5rem",
-          background: props.username == props.currUser ? "#FCCB00" : "white",
+          background: props.username == props.currUser ? "#FFCB55" : "white",
         }}
         label={props.text}
       />
@@ -114,9 +114,8 @@ function NewUserInput({ addNewUser }) {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         style={{
-          marginLeft: "2rem",
-          float: "right",
-          marginRight: "8rem",
+          marginLeft: "2.5rem",
+          float: "left",
         }}
       />
     </form>
@@ -220,7 +219,7 @@ export const Chat = () => {
       <div
         style={{
           width: "40rem",
-          maxHeight: "20rem",
+          height: "20rem",
           padding: "20px 10px 20px 20px",
           float: "right",
           marginRight: "10rem",
